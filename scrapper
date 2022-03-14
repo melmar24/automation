@@ -1,0 +1,134 @@
+package test;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+
+public class scrapper_selenium2 {
+
+	public static void main(String[] args) throws IOException {
+
+		System.setProperty("webdriver.chrome.driver","C:\\Automation\\Drivers\\chromedriver.exe");
+		
+		WebDriver driver = new ChromeDriver(); 
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+		
+		//Shopee Product Scrape
+		String baseUrl = "https://shopee.com.my/search?keyword=iphone%2011";
+		
+		commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
+				
+		String root = "div.row.shopee-search-item-result__items";
+		
+		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
+						
+	        //Name
+			String name_selector = root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div[data-sqe=\"name\"] > div > div";
+	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+		        	        	        	
+	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
+	        	System.out.println("Product Name: " + name.getText());
+	        	
+	        }
+	        
+	        //URL
+	        String link_selector =root + " > div:nth-child("+i+") > a";
+	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+	        	
+				WebElement link = driver.findElement(By.cssSelector(link_selector));
+				System.out.println("Product URL: " + link.getAttribute("href"));	        	
+	        	
+	        }
+			
+			//Currency and Price (From and To)
+			String currency_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(1)";
+	        if(driver.findElements(By.cssSelector(currency_selector)).size() > 0) {
+	        	
+	        	WebElement currency = driver.findElement(By.cssSelector(currency_selector));	        	
+
+				String price_from_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(2)";
+		        if(driver.findElements(By.cssSelector(price_from_selector)).size() > 0) {
+		        	
+		        	String price_to_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(4)";
+		        	if(driver.findElements(By.cssSelector(price_to_selector)).size() > 0) {
+		        		
+			        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
+			        	WebElement price_to = driver.findElement(By.cssSelector(price_to_selector));
+			        	System.out.println("Price: " + currency.getText() + price_from.getText() + " - " + currency.getText() + price_to.getText());
+			        			        			         	
+		        	}else {
+
+			        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
+			        	System.out.println("Price: " + currency.getText() + price_from.getText());
+			        	
+		        	}
+		        		        	
+		        }
+		        
+	        }
+	             	       			
+		}
+		
+		//Lazada Product Scrape
+		baseUrl = "https://www.lazada.com.my/catalog/?q=iphone+11&_keyori=ss&from=input&spm=a2o4k.home.search.go.75f82e7eiYpqKz";
+		
+		commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
+		
+		root = "div[data-qa-locator=\"general-products\"]";
+		
+		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
+						
+	        //Name
+			String name_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+		        	        	        	
+	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
+	        	System.out.println("Product Name: " + name.getText());
+	        	
+	        }
+	        
+	        //URL	        
+	        String link_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+	        	
+				WebElement link = driver.findElement(By.cssSelector(link_selector));
+				System.out.println("Product URL: " + link.getAttribute("href"));	        	
+	        	
+	        }
+			
+			//Price	        
+			String price_selector =root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(3) > span";
+	        if(driver.findElements(By.cssSelector(price_selector)).size() > 0) {
+	        	
+	        	WebElement price = driver.findElement(By.cssSelector(price_selector));
+	        	System.out.println("Price: " + price.getText());
+		        		        
+	        		        	
+	        }
+		        	        	             	       			
+		}	
+				
+		try{
+			
+			System.out.println("Test Passed!");	
+	
+		}catch(Exception e) {
+
+
+            System.out.println("Test Failed!");
+            System.out.println(e);            
+            
+		}finally {
+						
+			driver.close();
+			
+		}
+	}
+
+	
+}
