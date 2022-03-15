@@ -19,12 +19,16 @@ public class automation {
     public static void main(String[] args) throws IOException {
 
         String userHomeFolder = System.getProperty("user.home");
-        String baseUrl = "https://www.lazada.com.my/";
+        String baseUrl1 = "https://www.lazada.com.my/";
+        String baseUrl2 = "https://shopee.com.my/";
         String filePath = userHomeFolder + "/Automation/Results/";
         String StepNumber = "";
         String StepExpectedPass = "";
         String StepExpectedFail = "";
         String StepStatus = "N/A";
+        
+        //Parameters
+		String strText = "iphone 11";
         
         //Initialize Chromedriver
         System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver.exe");                
@@ -40,7 +44,7 @@ public class automation {
         try {
 
         	/***************************************************************************
-        	*Step Number:			1
+        	*Step Number:		1
         	*Step Description:	Validate the page title 
         	*Expected Results:  Page title is validated successfully.		 
         	***************************************************************************/		            
@@ -53,7 +57,7 @@ public class automation {
                 String actualTitle = "";     
 
                 //Open URL
-                commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
+                commonFunctions.functions.fn_OpenUrl(driver, baseUrl1, true);
                 
                 //Get the actual value of the title
                 actualTitle = driver.getTitle();
@@ -61,23 +65,22 @@ public class automation {
                 //Compare the expected title page vs the actual title page            
                 if (actualTitle.contentEquals(expectedTitle)) {
                     StepStatus = "PASSED";
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass + " " + expectedTitle);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass + " " + expectedTitle);
                 } else {
                     StepStatus = "FAILED";
                     commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                 
         	}
 
         	/***************************************************************************
-        	*Step Number:			2
+        	*Step Number:		2
         	*Step Description:	Search "text" in the search field 
         	*Expected Results:  Able to search "text" in the search field		 
         	***************************************************************************/            
         	if(StepStatus == "PASSED") {
         		
-        		String strText = "Iphone 11";
                 StepNumber = "Step2";
                 StepExpectedPass = "Able to search "+ strText +" in the search field.";
                 StepExpectedFail = "Unable to search "+ strText +" in the search field.";                     
@@ -103,25 +106,25 @@ public class automation {
     	        	
     	        	if(hName.getText().matches(strText)) {	       
     	                StepStatus = "PASSED";    	                
-    	                System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
+    	                System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
     	            } else {
     	                StepStatus = "FAILED";
     	                commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
-    	                System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+    	                System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
     	            }            
     	        	
     	        }else {
     	        	
                     StepStatus = "FAILED";
                     commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);	       
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);	       
     	        	
     	        }	 
     	        
         	}
 
         	/***************************************************************************
-        	*Step Number:			3
+        	*Step Number:		3
         	*Step Description:	Get Product Name, Price and URL 
         	*Expected Results:  Able to get Product Name, Price and URL		 
         	***************************************************************************/          	
@@ -143,6 +146,9 @@ public class automation {
         		//Root selector
         		root = "div[data-qa-locator=\"general-products\"]";
         		
+    			//Scroll down to load other products
+    			commonFunctions.functions.fn_ScrollDynamicWebpage(driver);
+    			
         		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
         						
         	        //Get Name
@@ -183,23 +189,208 @@ public class automation {
                 //Validate contents of the product_list          
                 if (product_list.size() > 0) {
                     StepStatus = "PASSED";
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
                 } else {
                     StepStatus = "FAILED";
                     commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                                 		        		
         	}
-                    	        	
+                     				
         	/***************************************************************************
-        	*Step Number:			X
+        	*Step Number:		4
+        	*Step Description:	Validate the page title 
+        	*Expected Results:  Page title is validated successfully.		 
+        	***************************************************************************/		            
+        	if(StepStatus == "PASSED") {
+        		
+                StepNumber = "Step4";
+                StepExpectedPass = "Page title is validated successfully.";
+                StepExpectedFail = "Unable to validate the page title successfully.";       
+                String expectedTitle = "Shopee Malaysia | Free Shipping Across Malaysia";
+                String actualTitle = "";     
+
+                //Open URL
+                commonFunctions.functions.fn_OpenUrl(driver, baseUrl2, true);
+                
+                //Get the actual value of the title
+                actualTitle = driver.getTitle();
+                
+    	        //Check for Language Selection popup
+    	        if(driver.findElements(By.className("language-selection")).size() > 0) {
+    	        
+    	        	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class=\"shopee-button-outline shopee-button-outline--primary-reverse \"]"))).click();	        	
+    	        	
+    	        }
+    	        
+    	        //Bypass New User popup
+    	        driver.findElement(By.xpath("//body")).click();
+    	        
+                //Compare the expected title page vs the actual title page            
+                if (actualTitle.contentEquals(expectedTitle)) {
+                    StepStatus = "PASSED";
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass + " " + expectedTitle);
+                } else {
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+                }
+                
+        	}
+	        
+        	/***************************************************************************
+        	*Step Number:		5
+        	*Step Description:	Search "text" in the search field 
+        	*Expected Results:  Able to search "text" in the search field		 
+        	***************************************************************************/   
+        	if(StepStatus == "PASSED") {
+        		
+                StepNumber = "Step5";
+                StepExpectedPass = "Able to search " + strText  + " in the search field";
+                StepExpectedFail = "Unable to search " + strText  + " in the search field";               		        		
+    	        String search_input = "div.shopee-searchbar > div > form > input";
+    	        String search_button = "div.shopee-searchbar > button";
+    	            	        
+    	        //Type "text" in the search bar
+    	        if(driver.findElements(By.cssSelector(search_input)).size() > 0) {
+
+		        	driver.findElement(By.cssSelector(search_input)).sendKeys(strText);    		        		        	
+		            	        
+    	        }
+    	        
+    	        //Click search button
+		        if(driver.findElements(By.cssSelector(search_button)).size() > 0) {
+		        	
+		        	new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.cssSelector(search_button))).click();
+		        	
+		        }
+    	        
+                //Validate search "text" in the results	        
+		        String h1_selector =  "div.shopee-search-item-result > h1 > span > span";
+    	        if(driver.findElements(By.cssSelector(h1_selector)).size() > 0) {
+    	        	
+    	        	WebElement hName = driver.findElement(By.cssSelector(h1_selector));
+    	        	
+    	        	if(hName.getText().matches(strText)) {	       
+    	                StepStatus = "PASSED";    	                
+    	                System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
+    	            } else {
+    	                StepStatus = "FAILED";
+    	                commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+    	                System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+    	            }            
+    	        	
+    	        }else {
+    	        	
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);	       
+    	        	
+    	        }		        
+		  
+            	/***************************************************************************
+            	*Step Number:		6
+            	*Step Description:	Get Product Name, Price and URL 
+            	*Expected Results:  Able to get Product Name, Price and URL		 
+            	***************************************************************************/          	
+            	if(StepStatus == "PASSED") {    	        
+            		
+                    StepNumber = "Step6";
+                    StepExpectedPass = "Able to get Product Name, Price and URL.";
+                    StepExpectedFail = "Unable to get Product Name, Price and URL.";                  
+            		String strWebsite = "Shopee";
+            		String strProductName = "";
+            		String strLink = "";
+            		String strPrice = "";
+            		String strProduct = "";
+            		String root = "";
+            		String name_selector = "";
+            		String link_selector = "";
+            		//String price_selector = "";
+            		            		
+        			root = "div.row.shopee-search-item-result__items";
+        			
+        			//Scroll down to load other products
+        			commonFunctions.functions.fn_ScrollDynamicWebpage(driver);
+        			
+        			for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
+        							
+        		        //Name
+        				name_selector = root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div[data-sqe=\"name\"] > div > div";
+        		        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+        			        	        	        	
+        		        	WebElement name = driver.findElement(By.cssSelector(name_selector));	        	
+        		        	strProductName = name.getText().replace(",", "");
+        		        }
+        		        
+        		        //URL
+        		        link_selector =root + " > div:nth-child("+i+") > a";
+        		        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+        		        	
+        					WebElement link = driver.findElement(By.cssSelector(link_selector));	        	
+        					strLink = link.getAttribute("href");
+        		        }
+        						        		       
+        				//Currency and Price (From and To)
+        				String currency_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(1)";
+        		        if(driver.findElements(By.cssSelector(currency_selector)).size() > 0) {
+        		        	
+        		        	WebElement currency = driver.findElement(By.cssSelector(currency_selector));	        	
+
+        					String price_from_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(2)";
+        			        if(driver.findElements(By.cssSelector(price_from_selector)).size() > 0) {
+        			        	
+        			        	String price_to_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(4)";
+        			        	if(driver.findElements(By.cssSelector(price_to_selector)).size() > 0) {
+        			        		
+        				        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
+        				        	WebElement price_to = driver.findElement(By.cssSelector(price_to_selector));
+        				        	strPrice = currency.getText() + price_from.getText() + "-" + currency.getText() + price_to.getText();
+        				        	strPrice = strPrice.replace(",", "");
+        				        			        			         	
+        			        	}else {
+
+        				        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
+        				        	strPrice = currency.getText() + price_from.getText();
+        				        	strPrice = strPrice.replace(",", "");
+        			        	} 
+        			        	
+        			        }
+        			        
+        		        }
+        		        
+        		        
+            	        if(strProductName != "" && strPrice != "" && strLink != "") {
+            	        	strProduct = strWebsite+","+strProductName +","+ strPrice +","+ strLink;
+            	        	//Add to product list
+            	        	product_list.add(strProduct);
+            	        }        		        
+        		         
+                       
+        			}
+        			
+                    //Validate contents of the product_list          
+                    if (product_list.size() > 0) {
+                        StepStatus = "PASSED";
+                        System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
+                    } else {
+                        StepStatus = "FAILED";
+                        commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                        System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+                    } 
+                    
+            	}            		
+        	}
+        	
+        	/***************************************************************************
+        	*Step Number:		7
         	*Step Description:	Write all the products to a csv file 
         	*Expected Results:  Able to write all the products to a csv file
         	***************************************************************************/          	
         	if(StepStatus == "PASSED") {
         		
-                StepNumber = "StepX";
+                StepNumber = "Step7";
                 StepExpectedPass = "Able to write all the products to a csv file";
                 StepExpectedFail = "Unable to write all the products to a csv file";                          		
         		String strTimeStamp = commonFunctions.functions.fn_GetTimeStamp();
@@ -224,15 +415,24 @@ public class automation {
                 if (csvFile.length() > 0) {
                     StepStatus = "PASSED";
                     StepExpectedPass = StepExpectedPass + " see file here " + filePath + strTimeStamp + "_product_list.csv";
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
                 } else {
                     StepStatus = "FAILED";
                     commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
-                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
+                    System.out.println("StepNumber: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                 
         	}
-        	                
+        	 
+        	/***************************************************************************
+        	*Step Number:		8
+        	*Step Description:	Sort the products by price (ascending) 
+        	*Expected Results:  Able sort the products by price (ascending)
+        	***************************************************************************/              	
+        	if(StepStatus == "PASSED") {
+        		
+        		//N/A
+        	}
         	
         } catch (Exception e) {
 
