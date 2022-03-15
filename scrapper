@@ -21,10 +21,10 @@ public class automation {
         String userHomeFolder = System.getProperty("user.home");
         String baseUrl = "https://www.lazada.com.my/";
         String filePath = userHomeFolder + "/Automation/Results/";
-        String tcNumber = "";
-        String tcExpectedPass = "";
-        String tcExpectedFail = "";
-        String tcStatus = "N/A";
+        String StepNumber = "";
+        String StepExpectedPass = "";
+        String StepExpectedFail = "";
+        String StepStatus = "N/A";
         
         //Initialize Chromedriver
         System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver.exe");                
@@ -40,15 +40,15 @@ public class automation {
         try {
 
         	/***************************************************************************
-        	*TC Number:			1
-        	*TC Description:	Validate the page title 
+        	*Step Number:			1
+        	*Step Description:	Validate the page title 
         	*Expected Results:  Page title is validated successfully.		 
         	***************************************************************************/		            
-        	if(tcStatus == "N/A") {
+        	if(StepStatus == "N/A") {
         		
-                tcNumber = "TC1";
-                tcExpectedPass = "Page title is validated successfully.";
-                tcExpectedFail = "Unable to validated successfully.";       
+                StepNumber = "Step1";
+                StepExpectedPass = "Page title is validated successfully.";
+                StepExpectedFail = "Unable to validated successfully.";       
                 String expectedTitle = "Lazada.com.my: Best Online Shopping in Malaysia";
                 String actualTitle = "";     
 
@@ -60,29 +60,29 @@ public class automation {
 
                 //Compare the expected title page vs the actual title page            
                 if (actualTitle.contentEquals(expectedTitle)) {
-                    tcStatus = "PASSED";
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+                    StepStatus = "PASSED";
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass + " " + expectedTitle);
                 } else {
-                    tcStatus = "FAILED";
-                    commonFunctions.functions.fn_TakeSnapshot(tcNumber,driver, filePath);
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                 
         	}
 
         	/***************************************************************************
-        	*TC Number:			2
-        	*TC Description:	Search "text" in the search field 
+        	*Step Number:			2
+        	*Step Description:	Search "text" in the search field 
         	*Expected Results:  Able to search "text" in the search field		 
         	***************************************************************************/            
-        	if(tcStatus == "PASSED") {
+        	if(StepStatus == "PASSED") {
         		
         		String strText = "Iphone 11";
-                tcNumber = "TC2";
-                tcExpectedPass = "Able to search "+ strText +" in the search field.";
-                tcExpectedFail = "Unable to search "+ strText +" in the search field.";                     
+                StepNumber = "Step2";
+                StepExpectedPass = "Able to search "+ strText +" in the search field.";
+                StepExpectedFail = "Unable to search "+ strText +" in the search field.";                     
                
-                //Input text in the search box
+    	        //Type "text" in the search bar
                 if (driver.findElements(By.className("search-box__input--O34g")).size() > 0) {
                     
                     commonFunctions.functions.fn_PopulateFields(driver, "class", "search-box__input--O34g", strText);
@@ -102,47 +102,51 @@ public class automation {
     	        	WebElement hName = driver.findElement(By.cssSelector("h1"));
     	        	
     	        	if(hName.getText().matches(strText)) {	       
-    	                tcStatus = "PASSED";    	                
-    	                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+    	                StepStatus = "PASSED";    	                
+    	                System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
     	            } else {
-    	                tcStatus = "FAILED";
-    	                commonFunctions.functions.fn_TakeSnapshot(tcNumber,driver, filePath);
-    	                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+    	                StepStatus = "FAILED";
+    	                commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+    	                System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
     	            }            
     	        	
     	        }else {
     	        	
-                    tcStatus = "FAILED";
-                    commonFunctions.functions.fn_TakeSnapshot(tcNumber,driver, filePath);
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);	       
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);	       
     	        	
     	        }	 
     	        
         	}
 
         	/***************************************************************************
-        	*TC Number:			3
-        	*TC Description:	Get Product Name, Price and URL 
+        	*Step Number:			3
+        	*Step Description:	Get Product Name, Price and URL 
         	*Expected Results:  Able to get Product Name, Price and URL		 
         	***************************************************************************/          	
-        	if(tcStatus == "PASSED") {
+        	if(StepStatus == "PASSED") {
         		
-                tcNumber = "TC3";
-                tcExpectedPass = "Able to get Product Name, Price and URL.";
-                tcExpectedFail = "Unable to get Product Name, Price and URL.";                  
+                StepNumber = "Step3";
+                StepExpectedPass = "Able to get Product Name, Price and URL.";
+                StepExpectedFail = "Unable to get Product Name, Price and URL.";                  
         		String strWebsite = "Lazada";
         		String strProductName = "";
         		String strLink = "";
         		String strPrice = "";
         		String strProduct = "";
+        		String root = "";
+        		String name_selector = "";
+        		String link_selector = "";
+        		String price_selector = "";
         		
         		//Root selector
-        		String root = "div[data-qa-locator=\"general-products\"]";
+        		root = "div[data-qa-locator=\"general-products\"]";
         		
         		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
         						
         	        //Get Name
-        			String name_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+        			name_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
         	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
         		        	        	        	
         	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
@@ -151,7 +155,7 @@ public class automation {
         	        }
         	        
         	        //Get URL	        
-        	        String link_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+        	        link_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
         	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
         	        	
         				WebElement link = driver.findElement(By.cssSelector(link_selector));	        	
@@ -160,7 +164,7 @@ public class automation {
         	        }
         			
         			//Get Price	        
-        			String price_selector =root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(3) > span";
+        			price_selector =root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(3) > span";
         	        if(driver.findElements(By.cssSelector(price_selector)).size() > 0) {
         	        	
         	        	WebElement price = driver.findElement(By.cssSelector(price_selector));
@@ -178,26 +182,26 @@ public class automation {
         		        		
                 //Validate contents of the product_list          
                 if (product_list.size() > 0) {
-                    tcStatus = "PASSED";
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+                    StepStatus = "PASSED";
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
                 } else {
-                    tcStatus = "FAILED";
-                    commonFunctions.functions.fn_TakeSnapshot(tcNumber,driver, filePath);
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                                 		        		
         	}
-                	
+                    	        	
         	/***************************************************************************
-        	*TC Number:			X
-        	*TC Description:	Write all the products to a csv file 
+        	*Step Number:			X
+        	*Step Description:	Write all the products to a csv file 
         	*Expected Results:  Able to write all the products to a csv file
         	***************************************************************************/          	
-        	if(tcStatus == "PASSED") {
+        	if(StepStatus == "PASSED") {
         		
-                tcNumber = "TCX";
-                tcExpectedPass = "Able to write all the products to a csv file";
-                tcExpectedFail = "Unable to write all the products to a csv file";                          		
+                StepNumber = "StepX";
+                StepExpectedPass = "Able to write all the products to a csv file";
+                StepExpectedFail = "Unable to write all the products to a csv file";                          		
         		String strTimeStamp = commonFunctions.functions.fn_GetTimeStamp();
         		
                 //Save the product list to a csv file
@@ -218,13 +222,13 @@ public class automation {
         		
                 //Validate csv file is populated
                 if (csvFile.length() > 0) {
-                    tcStatus = "PASSED";
-                    tcExpectedPass = " see file here " + filePath + strTimeStamp + "_product_list.csv";
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+                    StepStatus = "PASSED";
+                    StepExpectedPass = StepExpectedPass + " see file here " + filePath + strTimeStamp + "_product_list.csv";
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedPass);
                 } else {
-                    tcStatus = "FAILED";
-                    commonFunctions.functions.fn_TakeSnapshot(tcNumber,driver, filePath);
-                    System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+                    StepStatus = "FAILED";
+                    commonFunctions.functions.fn_TakeSnapshot(StepNumber,driver, filePath);
+                    System.out.println("Test Case: " + StepNumber + " Status: " + StepStatus + " Result: " + StepExpectedFail);
                 }
                 
         	}
@@ -232,7 +236,7 @@ public class automation {
         	
         } catch (Exception e) {
 
-            commonFunctions.functions.fn_TakeSnapshot(tcNumber, driver, filePath);
+            commonFunctions.functions.fn_TakeSnapshot(StepNumber, driver, filePath);
             System.out.println("Debug: Test Failed!");
             System.out.println(e);
 
@@ -245,3 +249,4 @@ public class automation {
 
     }
 }
+
