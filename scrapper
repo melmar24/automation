@@ -1,134 +1,189 @@
 package test;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+public class lazada {
 
-public class scrapper_selenium2 {
+    //private static final Logger logger = LogManager.getLogger(newClass.class);
 
-	public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
 
-		System.setProperty("webdriver.chrome.driver","C:\\Automation\\Drivers\\chromedriver.exe");
-		
-		WebDriver driver = new ChromeDriver(); 
-		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-		
-		//Shopee Product Scrape
-		String baseUrl = "https://shopee.com.my/search?keyword=iphone%2011";
-		
-		commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
-				
-		String root = "div.row.shopee-search-item-result__items";
-		
-		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
-						
-	        //Name
-			String name_selector = root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div[data-sqe=\"name\"] > div > div";
-	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
-		        	        	        	
-	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
-	        	System.out.println("Product Name: " + name.getText());
-	        	
-	        }
-	        
-	        //URL
-	        String link_selector =root + " > div:nth-child("+i+") > a";
-	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
-	        	
-				WebElement link = driver.findElement(By.cssSelector(link_selector));
-				System.out.println("Product URL: " + link.getAttribute("href"));	        	
-	        	
-	        }
-			
-			//Currency and Price (From and To)
-			String currency_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(1)";
-	        if(driver.findElements(By.cssSelector(currency_selector)).size() > 0) {
-	        	
-	        	WebElement currency = driver.findElement(By.cssSelector(currency_selector));	        	
+        String baseUrl = "https://www.lazada.com.my/";
+        String filePath = "C:\\Automation\\Project\\Result\\";
+        String tcNumber = "";
+        String tcExpectedPass = "";
+        String tcExpectedFail = "";
+        String tcStatus = "";
+        
+        //Initialize Chromedriver
+        System.setProperty("webdriver.chrome.driver", "C:\\Automation\\Drivers\\chromedriver.exe");
+        
+        WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 
-				String price_from_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(2)";
-		        if(driver.findElements(By.cssSelector(price_from_selector)).size() > 0) {
-		        	
-		        	String price_to_selector =root + " > div:nth-child("+i+") > a > div > div > div:nth-child(2) > div:nth-child(2) > div > span:nth-child(4)";
-		        	if(driver.findElements(By.cssSelector(price_to_selector)).size() > 0) {
-		        		
-			        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
-			        	WebElement price_to = driver.findElement(By.cssSelector(price_to_selector));
-			        	System.out.println("Price: " + currency.getText() + price_from.getText() + " - " + currency.getText() + price_to.getText());
-			        			        			         	
-		        	}else {
+		//Initialize Product Arraylist
+		List<String> product_list = new ArrayList<String>();
 
-			        	WebElement price_from = driver.findElement(By.cssSelector(price_from_selector));
-			        	System.out.println("Price: " + currency.getText() + price_from.getText());
-			        	
-		        	}
-		        		        	
-		        }
-		        
-	        }
-	             	       			
-		}
-		
-		//Lazada Product Scrape
-		baseUrl = "https://www.lazada.com.my/catalog/?q=iphone+11&_keyori=ss&from=input&spm=a2o4k.home.search.go.75f82e7eiYpqKz";
-		
-		commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
-		
-		root = "div[data-qa-locator=\"general-products\"]";
-		
-		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
-						
-	        //Name
-			String name_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
-	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
-		        	        	        	
-	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
-	        	System.out.println("Product Name: " + name.getText());
-	        	
-	        }
-	        
-	        //URL	        
-	        String link_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
-	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
-	        	
-				WebElement link = driver.findElement(By.cssSelector(link_selector));
-				System.out.println("Product URL: " + link.getAttribute("href"));	        	
-	        	
-	        }
-			
-			//Price	        
-			String price_selector =root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(3) > span";
-	        if(driver.findElements(By.cssSelector(price_selector)).size() > 0) {
-	        	
-	        	WebElement price = driver.findElement(By.cssSelector(price_selector));
-	        	System.out.println("Price: " + price.getText());
-		        		        
-	        		        	
-	        }
-		        	        	             	       			
-		}	
-				
-		try{
-			
-			System.out.println("Test Passed!");	
-	
-		}catch(Exception e) {
+        try {
 
+        	/***************************************************************************
+        	*TC Number:			1
+        	*TC Description:	Validate the page title 
+        	*Expected Results:  Page title is validated successfully.		 
+        	***************************************************************************/		            
+            tcNumber = "1";
+            tcExpectedPass = "Page title is validated successfully.";
+            tcExpectedFail = "Unable to validated successfully.";       
+            String expectedTitle = "Lazada.com.my: Best Online Shopping in Malaysia";
+            String actualTitle = "";     
 
-            System.out.println("Test Failed!");
-            System.out.println(e);            
+            //Open URL
+            commonFunctions.functions.fn_OpenUrl(driver, baseUrl, true);
             
-		}finally {
-						
-			driver.close();
-			
-		}
-	}
+            //Get the actual value of the title
+            actualTitle = driver.getTitle();
 
-	
+            //Compare the expected title page vs the actual title page            
+            if (actualTitle.contentEquals(expectedTitle)) {
+                tcStatus = "PASSED";
+                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+            } else {
+                tcStatus = "FAILED";
+                commonFunctions.functions.fn_TakeSnapshot(driver, filePath);
+                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+            }
+            
+        	/***************************************************************************
+        	*TC Number:			2
+        	*TC Description:	Search "text" in the search field 
+        	*Expected Results:  Able to search "text" in the search field		 
+        	***************************************************************************/            
+            tcNumber = "2";
+            tcExpectedPass = "Able to search \"text\" in the search field.";
+            tcExpectedFail = "Unable to search \"text\" in the search field.";      
+            String strText = "Iphone 11";
+           
+            //Input text in the search box
+            if (driver.findElements(By.className("search-box__input--O34g")).size() > 0) {
+                
+                commonFunctions.functions.fn_PopulateFields(driver, "class", "search-box__input--O34g", strText);
+                
+            }
+
+            //Click search button
+            if (driver.findElements(By.xpath(("//button[@class=\"search-box__button--1oH7\"]"))).size() > 0) {
+
+                new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@class=\"search-box__button--1oH7\"]"))).click();
+                
+            }
+                       
+            //Validate search "text" in the results	        
+	        if(driver.findElements(By.cssSelector("h1")).size() > 0) {
+	        	
+	        	WebElement hName = driver.findElement(By.cssSelector("h1"));
+	        	
+		        if(hName.getText() == strText) {	       
+	                tcStatus = "PASSED";
+	                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedPass);
+	            } else {
+	                tcStatus = "FAILED";
+	                commonFunctions.functions.fn_TakeSnapshot(driver, filePath);
+	                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);
+	            }            
+	        	
+	        }else {
+	        	
+                tcStatus = "FAILED";
+                commonFunctions.functions.fn_TakeSnapshot(driver, filePath);
+                System.out.println("Test Case: " + tcNumber + " Status: " + tcStatus + " Result: " + tcExpectedFail);	       
+	        	
+	        }	       
+	        
+        	/***************************************************************************
+        	*TC Number:			3
+        	*TC Description:	Get Product Name, Price and URL 
+        	*Expected Results:  Able to get Product Name, Price and URL		 
+        	***************************************************************************/  
+            tcNumber = "3";
+            tcExpectedPass = "Able to get Product Name, Price and URL.";
+            tcExpectedFail = "Unable to get Product Name, Price and URL.";                  
+    		String strWebsite = "Lazada";
+    		String strProductName = "";
+    		String strLink = "";
+    		String strPrice = "";
+    		String strProduct = "";
+    		
+    		//Root selector
+    		String root = "div[data-qa-locator=\"general-products\"]";
+    		
+    		for (int i=1; i<=driver.findElements(By.cssSelector(root + " > div")).size(); i++) {
+    						
+    	        //Get Name
+    			String name_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+    	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+    		        	        	        	
+    	        	WebElement name = driver.findElement(By.cssSelector(name_selector));
+    	        	//System.out.println("Product Name: " + name.getText());
+    	        	strProductName = name.getText();
+    	        	
+    	        }
+    	        
+    	        //Get URL	        
+    	        String link_selector = root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(2) > a";
+    	        if(driver.findElements(By.cssSelector(name_selector)).size() > 0) {
+    	        	
+    				WebElement link = driver.findElement(By.cssSelector(link_selector));
+    				//System.out.println("Product URL: " + link.getAttribute("href"));	        	
+    				strLink = link.getAttribute("href");
+    				
+    	        }
+    			
+    			//Get Price	        
+    			String price_selector =root + " > div:nth-child("+i+") > div > div > div:nth-child(2) > div:nth-child(3) > span";
+    	        if(driver.findElements(By.cssSelector(price_selector)).size() > 0) {
+    	        	
+    	        	WebElement price = driver.findElement(By.cssSelector(price_selector));
+    	        	//System.out.println("Price: " + price.getText());
+    	        	strPrice = price.getText();
+    	        		        		        	
+    	        }
+    	        
+    	        if(strProductName != "" && strPrice != "" && strLink != "") {
+    	        	//System.out.println(strWebsite+","+strProductName +","+ strPrice +","+ strLink);
+    	        	strProduct = strWebsite+","+strProductName +","+ strPrice +","+ strLink;
+    	        	//Add to product list
+    	        	product_list.add(strProduct);
+    	        }
+    		        	        	             	       			
+    		}            
+
+    		//Show product list to console
+    		System.out.println("Product list (Shopping Site,Product Name, Product Price, Product Link)");
+    		for(String product:product_list) {    			    			
+    			System.out.println(product);
+    		}
+
+        } catch (Exception e) {
+
+            commonFunctions.functions.fn_TakeSnapshot(driver, filePath);
+            System.out.println("Test Failed!");
+            System.out.println(e);
+
+        } finally {
+
+            driver.close();
+
+        }
+
+    }
 }
