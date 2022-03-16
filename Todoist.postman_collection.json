@@ -1,0 +1,398 @@
+{
+	"info": {
+		"_postman_id": "710a5794-8132-430c-a8eb-8a7a150c0929",
+		"name": "Todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllProjects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d7c3fef4-cbe6-4b58-8c08-0f9ab089de2a",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{{{token}}}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/projects",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateProject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ea14f97f-89ea-42a0-bcfd-bf03f3aecb35",
+						"exec": [
+							"var jsonResponse = JSON.parse(responseBody)\r",
+							"pm.collectionVariables.set(\"parm_project_id\", jsonResponse.id);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1234,\r\n    \"name\": \"Movies to watch\",\r\n    \"comment_count\": 0,\r\n    \"color\": 47,\r\n    \"shared\": false,\r\n    \"sync_id\": 0,\r\n    \"order\": 1,\r\n    \"favorite\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/projects",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAProject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2c4f1b35-d4d3-43bf-9fcd-bca0104a84ec",
+						"exec": [
+							"pm.test(\"Check if project exists\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var_project_id = pm.collectionVariables.get(\"parm_project_id\");\r",
+							"    pm.expect(jsonData.id).to.eql(var_project_id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{{{token}}}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/projects/{{parm_project_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"projects",
+						"{{parm_project_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateATask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "505ada79-b5cd-4d8a-b3f8-6f9192ff1125",
+						"exec": [
+							"var jsonResponse = JSON.parse(responseBody)\r",
+							"pm.collectionVariables.set(\"parm_task_id\", jsonResponse.id);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{{{token}}}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"content\": \"Alienist\",\r\n\t\"due_string\": \"This weekend\",\r\n\t\"due_lang\": \"en\",\r\n\t\"priority\": 4,\r\n    \"project_id\": {{parm_project_id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/tasks",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetATask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "778ab99a-78df-4238-99ec-55d30053e0b9",
+						"exec": [
+							"pm.test(\"Check if task exists\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var_task_id = pm.collectionVariables.get(\"parm_task_id\");\r",
+							"    pm.expect(jsonData.id).to.eql(var_task_id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{{{token}}}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/tasks/{{parm_task_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"tasks",
+						"{{parm_task_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateATask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a4831c95-3e86-4de0-a05d-8d42663b13cd",
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{parm_token}}",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "{{{{token}}}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"content\": \"Alienist\",\r\n\t\"due_string\": \"This weekend\",\r\n\t\"due_lang\": \"en\",\r\n\t\"priority\": 1,\r\n    \"project_id\": {{parm_project_id}}\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://api.todoist.com/rest/v1/tasks/{{parm_task_id}}",
+					"protocol": "https",
+					"host": [
+						"api",
+						"todoist",
+						"com"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"tasks",
+						"{{parm_task_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "46bf19b9-575e-4bc6-8557-cdd88ac4b1a3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0e754ad3-f10d-4541-82e3-137f397285db",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "029e1212-83b2-4b06-b0a6-ff57fb626494",
+			"key": "parm_token",
+			"value": "1af39c072f8709edf08e25a68354a68f92ad985d"
+		},
+		{
+			"id": "31bdd041-e620-45d2-ac83-0a6bc3f3a563",
+			"key": "parm_project_id",
+			"value": "2249753005"
+		},
+		{
+			"id": "43d01afe-92b3-47c3-9d1a-6f30dbc59fd9",
+			"key": "parm_task_id",
+			"value": ""
+		}
+	],
+	"protocolProfileBehavior": {}
+}
